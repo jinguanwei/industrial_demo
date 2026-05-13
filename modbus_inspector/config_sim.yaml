@@ -1,0 +1,52 @@
+# ============================================
+# Modbus 工控巡检程序 - 模拟器测试配置
+# 对接 simulator.py（端口 5020）
+# ============================================
+
+device:
+  name: "PLC-SIM"
+  mode: "tcp"
+  host: "127.0.0.1"
+  port: 5020
+  slave_id: 1
+  timeout: 3
+
+registers:
+  voltage:
+    description: "三相电压"
+    address: 0
+    count: 3
+    scale: 0.1
+    unit: "V"
+    labels: ["电压_A", "电压_B", "电压_C"]
+  current:
+    description: "三相电流"
+    address: 10
+    count: 3
+    scale: 0.01
+    unit: "A"
+    labels: ["电流_A", "电流_B", "电流_C"]
+  temperature:
+    description: "设备温度"
+    address: 20
+    count: 1
+    scale: 0.1
+    unit: "°C"
+    labels: ["温度"]
+
+collection:
+  interval_seconds: 10
+  retry_count: 2
+  retry_delay: 2
+
+logging:
+  level: "INFO"
+  dir: "logs"
+  max_bytes: 10_485_760
+  backup_count: 30
+
+report:
+  dir: "reports"
+  encoding: "utf-8-sig"
+
+timezone: "Asia/Shanghai"

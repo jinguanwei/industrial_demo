@@ -1,0 +1,80 @@
+# ============================================
+# Modbus 工控巡检程序 - 配置文件
+# ============================================
+
+device:
+  name: "PLC-1"
+  # 通信模式: "tcp" 或 "rtu"
+  mode: "tcp"
+  # ---- TCP 模式参数 ----
+  host: "192.168.1.100"
+  port: 502
+  # ---- RTU 模式参数 (mode: "rtu" 时生效) ----
+  # serial_port: "COM3"           # Windows
+  # serial_port: "/dev/ttyUSB0"   # Linux
+  baudrate: 9600
+  bytesize: 8
+  parity: "N"        # N=无, E=偶, O=奇
+  stopbits: 1
+
+  slave_id: 1
+  timeout: 5          # 单次请求超时(秒)
+
+# ============================================
+# 寄存器映射
+# 每个数据项:
+#   address : 起始寄存器地址(0-based)
+#   count   : 连续读取个数
+#   scale   : 缩放系数 (raw * scale = 工程值)
+#   unit    : 单位
+# ============================================
+registers:
+  voltage:
+    description: "三相电压"
+    address: 0
+    count: 3           # Ua, Ub, Uc
+    scale: 0.1
+    unit: "V"
+    labels: ["电压_A", "电压_B", "电压_C"]
+
+  current:
+    description: "三相电流"
+    address: 10
+    count: 3           # Ia, Ib, Ic
+    scale: 0.01
+    unit: "A"
+    labels: ["电流_A", "电流_B", "电流_C"]
+
+  temperature:
+    description: "设备温度"
+    address: 20
+    count: 1
+    scale: 0.1
+    unit: "°C"
+    labels: ["温度"]
+
+# ============================================
+# 采集参数
+# ============================================
+collection:
+  interval_seconds: 60     # 采集间隔
+  retry_count: 3           # 失败重试次数
+  retry_delay: 5           # 重试间隔(秒)
+
+# ============================================
+# 日志配置
+# ============================================
+logging:
+  level: "INFO"
+  dir: "logs"
+  max_bytes: 10_485_760    # 10 MB
+  backup_count: 30         # 保留30个历史文件
+
+# ============================================
+# 报告配置
+# ============================================
+report:
+  dir: "reports"
+  encoding: "utf-8-sig"    # 含 BOM，Excel 直接打开不乱码
+
+timezone: "Asia/Shanghai"
